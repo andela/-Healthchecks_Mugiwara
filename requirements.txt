@@ -14,7 +14,7 @@ heroku==0.1.4
 lxml==3.7.3
 packaging==16.8
 premailer==2.9.6
-psycopg2==2.6.1
+psycopg2==2.6.2
 pyparsing==2.2.0
 python-dateutil==1.5
 rcssmin==1.0.6
