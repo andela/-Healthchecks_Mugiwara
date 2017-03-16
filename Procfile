@@ -1,3 +1,3 @@
 
-web: gunicorn -Healthchecks_Mugiwara.wsgi
+web: gunicorn hc.wsgi
 
