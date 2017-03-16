@@ -153,3 +153,18 @@ if os.path.exists(os.path.join(BASE_DIR, "hc/local_settings.py")):
     from .local_settings import *
 else:
     warnings.warn("local_settings.py not found, using defaults")
+
+## Allow all host hosts/domain names for this site
+ALLOWED_HOSTS = ['https://guarded-hollows-85109.herokuapp.com']
+
+# Parse database configurations from $DATABASE_URL
+DATABASES = {'default' : dj_database_url.config()}
+
+# Honor the 'X-Forwarded-Proto' header for requests.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# try to load local_settings.py if it exists
+try:
+    from local_settings import *
+except Exception as e:
+    pass
