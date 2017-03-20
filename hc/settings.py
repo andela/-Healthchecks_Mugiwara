@@ -95,6 +95,7 @@ DATABASES = {
 # You can switch database engine to postgres or mysql using environment
 # variable 'DB'. Travis CI does this.
 if os.environ.get("DB") == "postgres":
+    DATABASE_URL = 'postgresql:///postgresql'
     DATABASES = {
         'default': {
             'ENGINE':   'django.db.backends.postgresql',
@@ -105,6 +106,7 @@ if os.environ.get("DB") == "postgres":
     }
 
 if os.environ.get("DB") == "mysql":
+    DATABASE_URL = 'sqlite://' + os.path.join(BASE_DIR, 'db.sqlite3')
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
@@ -162,7 +164,7 @@ PUSHBULLET_CLIENT_SECRET = None
 ALLOWED_HOSTS = ['https://team-mugiwara.herokuapp.com']
 
 # Parse database configurations from $DATABASE_URL
-DATABASES = {'default' : dj_database_url.config()}
+DATABASES = {'default' : dj_database_url.config(default=DATABASE_URL)}
 
 # Honor the 'X-Forwarded-Proto' header for requests.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
