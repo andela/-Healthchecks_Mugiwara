@@ -153,10 +153,10 @@ PUSHOVER_EMERGENCY_EXPIRATION = 86400
 PUSHBULLET_CLIENT_ID = None
 PUSHBULLET_CLIENT_SECRET = None
 
-if os.path.exists(os.path.join(BASE_DIR, "hc/local_settings.py")):
-    from .local_settings import *
-else:
-    warnings.warn("local_settings.py not found, using defaults")
+# if os.path.exists(os.path.join(BASE_DIR, "hc/local_settings.py")):
+#     from .local_settings import *
+# else:
+#     warnings.warn("local_settings.py not found, using defaults")
 
 ## Allow all host hosts/domain names for this site
 ALLOWED_HOSTS = ['https://team-mugiwara.herokuapp.com']
@@ -168,7 +168,7 @@ DATABASES = {'default' : dj_database_url.config()}
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # try to load local_settings.py if it exists
-try:
-    from local_settings import *
-except Exception as e:
-    pass
+# try:
+#     from local_settings import *
+# except Exception as e:
+#     pass
