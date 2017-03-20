@@ -85,17 +85,14 @@ TEST_RUNNER = 'hc.api.tests.CustomRunner'
 # install requirements.txt and do manage.py runserver and it works
 DATABASES = {
     'default': {
-        'ENGINE':   'django.db.backends.postgresql',
-        'NAME':     'hc',
-        'USER':     'postgres',
-        'TEST': {'CHARSET': 'UTF8'}
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME':   './hc.sqlite',
     }
 }
 
 # You can switch database engine to postgres or mysql using environment
 # variable 'DB'. Travis CI does this.
 if os.environ.get("DB") == "postgres":
-    DATABASE_URL = 'postgresql:///postgresql'
     DATABASES = {
         'default': {
             'ENGINE':   'django.db.backends.postgresql',
@@ -106,7 +103,6 @@ if os.environ.get("DB") == "postgres":
     }
 
 if os.environ.get("DB") == "mysql":
-    DATABASE_URL = 'sqlite://' + os.path.join(BASE_DIR, 'db.sqlite3')
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
@@ -155,11 +151,12 @@ PUSHOVER_EMERGENCY_EXPIRATION = 86400
 PUSHBULLET_CLIENT_ID = None
 PUSHBULLET_CLIENT_SECRET = None
 
-# Allow all host hosts/domain names for this site
+# # Allow all host hosts/domain names for this site
 ALLOWED_HOSTS = ['team-mugiwara.herokuapp.com']
+
 # Parse database configuration from $DATABASE_URL
 DATABASE_URL = 'postgresql:///postgresql'
 DATABASES = {'default': dj_database_url.config(default=DATABASE_URL)}
 
-# Honor the 'X-Forwarded-Proto' header for requests.is_secure()
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
