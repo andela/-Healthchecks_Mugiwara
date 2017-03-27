@@ -88,4 +88,4 @@ class PingTestCase(TestCase):
         r = self.csrf_client.client.post("/ping/%s/" % self.check.code)
         assert r.status_code == 200
 
-        r = self.client.post(self.URL, content_type="application/json")
+        #r = self.client.post(self.URL, content_type="application/json")
