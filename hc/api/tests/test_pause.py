@@ -7,10 +7,13 @@ class PauseTestCase(BaseTestCase):
     def test_it_works(self):
         check = Check(user=self.alice, status="up")
         check.save()
-
+        import pdb; pdb.set_trace()
+        print(check)
         url = "/api/v1/checks/%s/pause" % check.code
         r = self.client.post(url, "", content_type="application/json",
                              HTTP_X_API_KEY="abc")
+        self.assertEqual(r.status_code, 400)
+        self.assertEqual(check.status, "up")
 
         ### Assert the expected status code and check's status
 
@@ -22,6 +25,11 @@ class PauseTestCase(BaseTestCase):
         r = self.client.post(url, "", content_type="application/json",
                              HTTP_X_API_KEY="abc")
 
-        self.assertEqual(r.status_code, 400)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(check.status, "paused")
 
         ### Test that it only allows post requests
+    def test_for_post_request(self):
+        url = "/api/v1/checks/%s/pause"
+        r = self.client.post(url, HTTP_X_API_KEY="abc")
+        self.assertEqual(r.status_code, 404)

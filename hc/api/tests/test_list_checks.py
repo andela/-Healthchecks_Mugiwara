@@ -1,7 +1,6 @@
 import json
 from datetime import timedelta as td
 from django.utils.timezone import now
-
 from hc.api.models import Check
 from hc.test import BaseTestCase
 
@@ -30,15 +29,19 @@ class ListChecksTestCase(BaseTestCase):
 
     def get(self):
         return self.client.get("/api/v1/checks/", HTTP_X_API_KEY="abc")
-
+    
     def test_it_works(self):
         r = self.get()
+        self.assertEqual(r.status_code, 200)
         ### Assert the response status code
 
         doc = r.json()
         self.assertTrue("checks" in doc)
 
         checks = {check["name"]: check for check in doc["checks"]}
+        self.assertTrue(len(checks) == 2)
+        self.assertTrue(("timeout" and "grace" and "ping_url" and "status" and "last_ping" and "n_pings" and "pause_url") in checks["Alice 1"].keys())
+        self.assertTrue(("timeout" and "grace" and "ping_url" and "status" and "last_ping" and "n_pings" and "pause_url") in checks["Alice 2"].keys())
         ### Assert the expected length of checks
         ### Assert the checks Alice 1 and Alice 2's timeout, grace, ping_url, status,
         ### last_ping, n_pings and pause_url
@@ -52,5 +55,9 @@ class ListChecksTestCase(BaseTestCase):
         self.assertEqual(len(data["checks"]), 2)
         for check in data["checks"]:
             self.assertNotEqual(check["name"], "Bob 1")
+        
 
     ### Test that it accepts an api_key in the request
+    # def test_it_accepts_api_key(self):
+    #     res = self.client.get("/api/v1/checks/")
+    #     self.assertEqual(res.json()['error'], 'wrong api_key')
