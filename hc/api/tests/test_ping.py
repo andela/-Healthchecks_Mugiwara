@@ -64,7 +64,7 @@ class PingTestCase(TestCase):
         ping = Ping.objects.latest("id")
         ### Assert the expected response status code and ping's scheme
         assert r.status_code == 200
-        assert ping.remote_addr == "1.1.1.1"
+        assert ping.remote_addr == "127.0.0.1"
 
     def test_it_never_caches(self):
         r = self.client.get("/ping/%s/" % self.check.code)
@@ -84,6 +84,8 @@ class PingTestCase(TestCase):
     ### Test that the csrf_client head works
 
     def test_csrf_client(self):
-        csrf_client = Client(enforce_csrf_checks=True)
+        self.csrf_client = Client(enforce_csrf_checks=True)
         r = self.csrf_client.client.post("/ping/%s/" % self.check.code)
         assert r.status_code == 200
+
+        r = self.client.post(self.URL, content_type="application/json")

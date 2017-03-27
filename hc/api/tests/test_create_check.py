@@ -6,6 +6,7 @@ from datetime import timedelta, datetime
 from hc.api.models import Channel, Check
 from hc.test import BaseTestCase
 from django.http import HttpResponseBadRequest, JsonResponse, HttpRequest
+from django.test import tag
 
 
 class CreateCheckTestCase(BaseTestCase):
@@ -23,7 +24,7 @@ class CreateCheckTestCase(BaseTestCase):
         if expected_error:
             self.assertEqual(r.status_code, 400)
             self.assertTrue(r.status_code, expected_error)
-            self.assertIn(response_error, r.json())
+            self.assertEqual(response_error, expected_error)
 
             ### Assert that the expected error is the response error
 
@@ -104,8 +105,11 @@ class CreateCheckTestCase(BaseTestCase):
         self.assertEqual(check.channel_set.get(), channel)
 
     ### Test for the 'timeout is too small' and 'timeout is too large' errors
+ 
     def test_timeout_small_error(self):
         self.post({"api_key": "abc", "timeout": 0}, expected_error="Error, timeout too small")
+        #self.assertTrue(self.post["timeout"] > 0, msg="Error, timeout too small")
+        self.assertRaises(expected_exception="Error, timeout too small")
 
     def test_timeout_large_error(self):
         self.post({"api_key": "abc", "timeout": 999999}, expected_error="Error, timeout too large")
