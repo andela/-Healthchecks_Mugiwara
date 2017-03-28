@@ -7,7 +7,7 @@ from hc.api.models import Check
 
 @tag('test_profile')
 class ProfileTestCase(BaseTestCase):
-
+    @tag('set_password_link')
     def test_it_sends_set_password_link(self):
         self.client.login(username="alice@example.org", password="password")
 
@@ -24,7 +24,6 @@ class ProfileTestCase(BaseTestCase):
         ### Assert that the email was sent and check email content
         self.assertIn("Hello,\n\nHere's a link to set a password for your account on healthchecks.io:", mail.outbox[0].body)
         self.assertEqual(mail.outbox[0].subject, "Set password on healthchecks.io")
-
 
 
     @tag('sends_report')
