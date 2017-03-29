@@ -85,5 +85,12 @@ class PingTestCase(TestCase):
 
     def test_csrf_client(self):
         self.csrf_client = Client(enforce_csrf_checks=True)
+<<<<<<< HEAD
         r = self.csrf_client.head("/ping/%s/" % self.check.code)
         assert r.status_code == 200
+=======
+        r = self.csrf_client.client.post("/ping/%s/" % self.check.code)
+        assert r.status_code == 200
+
+        #r = self.client.post(self.URL, content_type="application/json")
+>>>>>>> 135c5728c68e5f19184176ed945bed0c5574dc9b
