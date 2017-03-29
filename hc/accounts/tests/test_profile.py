@@ -5,7 +5,7 @@ from hc.test import BaseTestCase
 from hc.accounts.models import Member
 from hc.api.models import Check
 
-
+@tag('test_profile')
 class ProfileTestCase(BaseTestCase):
     @tag('set_password_link')
     def test_it_sends_set_password_link(self):
@@ -22,10 +22,11 @@ class ProfileTestCase(BaseTestCase):
         self.assertNotEqual(token, "")
 
         ### Assert that the email was sent and check email content
+        self.assertIn("Hello,\n\nHere's a link to set a password for your account on healthchecks.io:", mail.outbox[0].body)
+        self.assertEqual(mail.outbox[0].subject, "Set password on healthchecks.io")
 
 
-
-        
+    @tag('sends_report')
     def test_it_sends_report(self):
         check = Check(name="Test Check", user=self.alice)
         check.save()
@@ -35,9 +36,9 @@ class ProfileTestCase(BaseTestCase):
         ###Assert that the email was sent and check email content
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, 'Monthly Report')
-        self.assertTrue("Hello,\n\nThis is a monthly report sent by health" in mail.outbox[0].body)
+        self.assertTrue("Hello,\n\nThis is a monthly report sent by healthchecks" in mail.outbox[0].body)
 
-
+    @tag('adds_team_member')
     def test_it_adds_team_member(self):
         self.client.login(username="alice@example.org", password="password")
 
@@ -121,6 +122,7 @@ class ProfileTestCase(BaseTestCase):
         self.assertNotContains(r, "bobs-tag.svg")
 
     ### Test it creates and revokes API key
+    @tag('revokes_API')
     def test_it_creates_and_revokes_api_key(self):
         initial_key = self.profile.api_key
         self.assertNotEqual(initial_key, self.profile.set_api_key(), msg="Should create new key different from initial_key")

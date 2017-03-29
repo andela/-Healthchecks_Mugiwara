@@ -5,7 +5,7 @@ from hc.api.models import Check
 from hc.accounts.models import Member
 
 
-
+@tag('test_login')
 class LoginTestCase(TestCase):
     @tag('sends_link')
     def test_it_sends_link(self):
@@ -22,14 +22,19 @@ class LoginTestCase(TestCase):
         assert r.status_code == 302
 
         ### Assert that a user was created
-        user_check = User.objects.filter(email="alice@example.org")
-        self.assertEqual(user_check[0].email, form["email"])
+        user = User.objects.get(email="alice@example.org")
+        self.assertEqual(user.email, form["email"])
 
         # And email sent
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, 'Log in to healthchecks.io')
         ### Assert contents of the email body
+        self.assertIn("Hello,\n\nTo log into healthchecks.io, please open the link below:", mail.outbox[0].body)
+
         ### Assert that check is associated with the new user
+        test_user = Check.objects.get(user=user)
+        self.assertEqual(test_user.user, user)
+
 
 
     def test_it_pops_bad_link_from_session(self):
