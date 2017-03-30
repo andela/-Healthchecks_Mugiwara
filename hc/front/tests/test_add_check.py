@@ -20,4 +20,4 @@ class AddCheckTestCase(BaseTestCase):
         self.client.login(username="bob@example.org", password="password")
         r = self.client.post(url)
         team_access = Check.objects.get()
-        self.assertIn(team_user.user, self.alice)
+        self.assertEqual(team_access.user, self.alice)
