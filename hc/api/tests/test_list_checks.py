@@ -31,11 +31,11 @@ class ListChecksTestCase(BaseTestCase):
         return self.client.get("/api/v1/checks/", HTTP_X_API_KEY="abc")
     
     def test_it_works(self):
-        r = self.get()
-        self.assertEqual(r.status_code, 200)
+        response = self.get()
+        self.assertEqual(response.status_code, 200)
         ### Assert the response status code
 
-        doc = r.json()
+        doc = response.json()
         self.assertTrue("checks" in doc)
 
         checks = {check["name"]: check for check in doc["checks"]}
@@ -50,14 +50,15 @@ class ListChecksTestCase(BaseTestCase):
         bobs_check = Check(user=self.bob, name="Bob 1")
         bobs_check.save()
 
-        r = self.get()
-        data = r.json()
+        response = self.get()
+        data = response.json()
         self.assertEqual(len(data["checks"]), 2)
         for check in data["checks"]:
             self.assertNotEqual(check["name"], "Bob 1")
         
 
     ### Test that it accepts an api_key in the request
-    # def test_it_accepts_api_key(self):
-    #     res = self.client.get("/api/v1/checks/")
-    #     self.assertEqual(res.json()['error'], 'wrong api_key')
+    def test_it_accepts_api_key(self):                          #ask James
+        # response = self.client.post("/api/v1/checks/")
+        response = self.get()
+        # import pdb; pdb.set_trace()

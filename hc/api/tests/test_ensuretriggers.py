@@ -18,6 +18,7 @@ class EnsureTriggersTestCase(TestCase):
         assert check.alert_after is not None
         ### The above assert fails. Make it pass
 
+
         alert_after = check.alert_after
 
         check.last_ping += timedelta(days=1)

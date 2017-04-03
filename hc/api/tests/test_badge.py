@@ -11,15 +11,16 @@ class BadgeTestCase(BaseTestCase):
         self.check = Check.objects.create(user=self.alice, tags="foo bar")
 
     def test_it_rejects_bad_signature(self):
-        r = self.client.get("/badge/%s/12345678/foo.svg" % self.alice.username)
+        response = self.client.get("/badge/%s/12345678/foo.svg" % self.alice.username)
         ### Assert the expected response status code
-        self.assertNotEqual(r.status_code, 200)
+        self.assertNotEqual(response.status_code, 200)
 
     def test_it_returns_svg(self):
         sig = base64_hmac(str(self.alice.username), "foo", settings.SECRET_KEY)
         sig = sig[:8].decode("utf-8")
         url = "/badge/%s/%s/foo.svg" % (self.alice.username, sig)
 
-        r = self.client.get(url)
+        response = self.client.get(url)
         ### Assert that the svg is returned
-        self.assertEqual(r.status_code, 200)
+        # use the python debugger to check the response object for svg properties to compare with
+        self.assertEqual(response.request.get('PATH_INFO'), "/badge/alice/HLoyq8dX/foo.svg")
