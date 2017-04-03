@@ -22,5 +22,5 @@ class BadgeTestCase(BaseTestCase):
 
         response = self.client.get(url)
         ### Assert that the svg is returned
-        # use the python debugger to check the response object for svg properties to compare with
         self.assertEqual(response.request.get('PATH_INFO'), "/badge/alice/HLoyq8dX/foo.svg")
+        
