@@ -2,7 +2,7 @@ from django.test.utils import override_settings
 from django.test import tag
 from hc.api.models import Channel, Check
 from hc.test import BaseTestCase
-import pdb
+
 
 
 @override_settings(PUSHOVER_API_TOKEN="token", PUSHOVER_SUBSCRIPTION_URL="url")
@@ -45,14 +45,14 @@ class AddChannelTestCase(BaseTestCase):
         url = "/checks/add/"
         self.client.post(url)
         team_access =  Check.objects.get()
-        self.assertEqual(team_access.user, self.alice, "Should return a valid team member")
+        self.assertEqual(team_access.user.username, 'alice')
         
         
     ### Test that bad kinds don't work
     @tag('bad_kinds')
     def test_bad_kinds_dont_work(self):
         self.client.login(username="alice@example.org", password="password")
-        kinds = "jabbajabba"
+        kinds = "jabbawabba"
         url = "/integrations/add_%s" % kinds
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404, "Should return a 404 error for bad kinds.")

@@ -1,5 +1,5 @@
-from hchanel.api.models import Channel
-from hchanel.test import BaseTestCase
+from hc.api.models import Channel
+from hc.test import BaseTestCase
 
 
 class AddWebhookTestCase(BaseTestCase):
@@ -23,7 +23,7 @@ class AddWebhookTestCase(BaseTestCase):
         self.client.post("/integrations/add_webhook/", form)
 
         chanel = Channel.objects.get()
-        self.assertEqual(chanel.useresponse,  self.alice)
+        self.assertEqual(chanel.user,  self.alice)
         self.assertEqual(chanel.value, "http://foo.com\nhttps://bar.com")
 
     def test_it_rejects_non_http_webhook_urls(self):
@@ -31,7 +31,7 @@ class AddWebhookTestCase(BaseTestCase):
 
         self.client.login(username="alice@example.org", password="password")
         response = self.client.post("/integrations/add_webhook/", form)
-        self.assertContains(response,  "Enteresponse a valid URL.")
+        self.assertContains(response,  "Enter a valid URL.")
 
         self.assertEqual(Channel.objects.count(), 0)
 

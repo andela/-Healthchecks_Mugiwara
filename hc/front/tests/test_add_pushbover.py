@@ -2,7 +2,6 @@ from django.test.utils import override_settings
 from django.test import tag
 from hc.api.models import Channel
 from hc.test import BaseTestCase
-import pdb
 
 
 @override_settings(PUSHOVER_API_TOKEN="token", PUSHOVER_SUBSCRIPTION_URL="url")

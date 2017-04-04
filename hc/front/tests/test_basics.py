@@ -7,7 +7,7 @@ class BasicsTestCase(TestCase):
 
     def test_it_shows_welcome(self):
         response = self.client.get("/")
-        self.assertContains(r, "Get Notified", status_code=200)
+        self.assertContains(response, "Get Notified", status_code=200)
 
     def test_welcome_code(self):
         response = self.client.get("/")
