@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 import warnings
 
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 HOST = "localhost"
@@ -93,7 +94,7 @@ DATABASES = {
 if os.environ.get("DB") == "postgres":
     DATABASES = {
         'default': {
-            'ENGINE':   'django.db.backends.postgresql',
+            'ENGINE':   'django.db.backends.postgresql_psycopg2',
             'NAME':     'hc',
             'USER':     'postgres',
             'TEST': {'CHARSET': 'UTF8'}
@@ -133,7 +134,12 @@ STATICFILES_FINDERS = (
 )
 COMPRESS_OFFLINE = True
 
-EMAIL_BACKEND = "djmail.backends.default.EmailBackend"
+DJMAIL_REAL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'healthchecks.io@gmail.com'
+EMAIL_HOST_PASSWORD = "Healthchecks1234"
+EMAIL_PORT = 587
 
 # Slack integration -- override these in local_settings
 SLACK_CLIENT_ID = None
@@ -150,6 +156,13 @@ PUSHBULLET_CLIENT_ID = None
 PUSHBULLET_CLIENT_SECRET = None
 
 if os.path.exists(os.path.join(BASE_DIR, "hc/local_settings.py")):
-    from .local_settings import *
+     from .local_settings import *
 else:
-    warnings.warn("local_settings.py not found, using defaults")
+     warnings.warn("local_settings.py not found, using defaults")
+
+DJMAIL_REAL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'healthchecks.io@gmail.com'
+EMAIL_HOST_PASSWORD = "Healthchecks1234"
+EMAIL_PORT = 587
