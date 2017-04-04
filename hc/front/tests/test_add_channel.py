@@ -1,5 +1,5 @@
-from django.test.utils import override_settings
 from django.test import tag
+from django.test.utils import override_settings
 from hc.api.models import Channel, Check
 from hc.test import BaseTestCase
 
@@ -46,6 +46,7 @@ class AddChannelTestCase(BaseTestCase):
         self.client.post(url)
         team_access =  Check.objects.get()
         self.assertEqual(team_access.user.username, 'alice')
+
         
         
     ### Test that bad kinds don't work
