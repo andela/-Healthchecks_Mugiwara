@@ -1,5 +1,4 @@
 import json
-
 from django.core import mail
 from django.test import override_settings
 from hc.api.models import Channel, Check, Notification
@@ -221,5 +220,11 @@ class NotifyTestCase(BaseTestCase):
         args, kwargs = mock_post.call_args
         json = kwargs["json"]
         self.assertEqual(json["message_type"], "CRITICAL")
-
     ### Test that the web hooks handle connection errors and error 500s
+    @patch("hc.api.transports.requests.request")
+    def test_web_hooks_handle_connection_errors(self, mock_post):
+        self._setup_data("webhook", "http://example")
+        mock_post.return_value.status_code = 500
+        self.channel.notify(self.check)
+        n = Notification.objects.get()
+        self.assertEqual(n.error, "Received status code 500")
