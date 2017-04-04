@@ -1,6 +1,7 @@
 import uuid
 import re
 
+from datetime import timedelta
 from django.contrib import messages
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
@@ -18,6 +19,11 @@ from hc.accounts.models import Profile, Member
 from hc.api.models import Channel, Check
 from hc.lib.badges import get_badge_url
 
+PERIODIC_CHOICES = (
+    ('1', 'Daily'),
+    ('2', 'Weekly'),
+    ('3', 'Monthly'),
+)
 
 def _make_user(email):
     username = str(uuid.uuid4())[:30]
@@ -156,8 +162,20 @@ def profile(request):
         elif "update_reports_allowed" in request.POST:
             form = ReportSettingsForm(request.POST)
             if form.is_valid():
-                profile.reports_allowed = form.cleaned_data["reports_allowed"]
+                profile.reports_allowed = request.POST.get("reports_allowed", PERIODIC_CHOICES)
                 profile.save()
+                # picks from database and saves
+                if profile.reports_allowed == "3":
+                    profile.next_report_date = now + timedelta(day=30)
+                    profile.save()
+
+                if profile.reports_allowed == "2":
+                    profile.next_report_date = now + timedelta(day=7)
+                    profile.save()
+
+                if profile.reports_allowed == "1":
+                    profile.next_report_date = now + timedelta(day=1)
+                    profile.save()
                 messages.success(request, "Your settings have been updated!")
         elif "invite_team_member" in request.POST:
             if not profile.team_access_allowed:
@@ -253,7 +271,7 @@ def unsubscribe_reports(request, username):
         return HttpResponseBadRequest()
 
     user = User.objects.get(username=username)
-    user.profile.reports_allowed = False
+    user.profile.reports_allowed = '0'
     user.profile.save()
 
     return render(request, "accounts/unsubscribed.html")
