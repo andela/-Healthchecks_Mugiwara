@@ -164,18 +164,7 @@ def profile(request):
             if form.is_valid():
                 profile.reports_allowed = request.POST.get("reports_allowed", PERIODIC_CHOICES)
                 profile.save()
-                # picks from database and saves
-                # if profile.reports_allowed == "3":
-                #     profile.next_report_date = now + timedelta(day=30)
-                #     profile.save()
-
-                # if profile.reports_allowed == "2":
-                #     profile.next_report_date = now + timedelta(day=7)
-                #     profile.save()
-
-                # if profile.reports_allowed == "1":
-                #     profile.next_report_date = now + timedelta(day=1)
-                #     profile.save()
+        
                 messages.success(request, "Your settings have been updated!")
         elif "invite_team_member" in request.POST:
             if not profile.team_access_allowed:
