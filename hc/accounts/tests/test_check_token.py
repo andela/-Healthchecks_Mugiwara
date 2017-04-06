@@ -13,12 +13,12 @@ class CheckTokenTestCase(BaseTestCase):
     
     @tag('it_shows_form')
     def test_it_shows_form(self):
-        r = self.client.get("/accounts/check_token/alice/secret-token/")
-        self.assertContains(r, "You are about to log in")
+        response = self.client.get("/accounts/check_token/alice/secret-token/")
+        self.assertContains(response, "You are about to log in")
     @tag('it_redirects')
     def test_it_redirects(self):
-        r = self.client.post("/accounts/check_token/alice/secret-token/")
-        self.assertRedirects(r, "/checks/")
+        response = self.client.post("/accounts/check_token/alice/secret-token/")
+        self.assertRedirects(response, "/checks/")
 
         # After login, token should be blank
         self.profile.refresh_from_db()
