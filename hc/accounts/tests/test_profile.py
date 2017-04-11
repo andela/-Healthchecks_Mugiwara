@@ -35,10 +35,9 @@ class ProfileTestCase(BaseTestCase):
         self.alice.profile.send_report()
 
         ###Assert that the email was sent and check email content
-
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, 'Monthly Report')
-        self.assertTrue("Hello,\n\nThis is a monthly report sent by healthchecks" in mail.outbox[0].body)
+        self.assertTrue("Hello,\n\nThis is a report sent by healthchecks" in mail.outbox[0].body)
 
 
     @tag('adds_team_member')
